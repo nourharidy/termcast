@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var nodecast = require('nodecast');
 var inquirer = require('inquirer');
 var getYouTubeID = require('get-youtube-id');
@@ -13,7 +15,7 @@ if(process.argv[2] === "stop") {
 } else if(process.argv[2] === "stopall") {
     stopall = true;
 } else {
-    id = getYouTubeID(process.argv[2], {fuzzy: false})
+    id = getYouTubeID(process.argv[2])
     if(id === null) {
         console.log('Invalid Youtube link')
         process.exit()
@@ -33,9 +35,11 @@ setTimeout(function(){
             let yt = device.app('YouTube');
             yt.stop(function(err){
                 console.log('Stopped', device.name)
+                if(i === knownDevices.length) {
+                    process.exit()
+                }
             })
         }
-        process.exit()
     } else {
         var names = []
         for (var i = 0; i < knownDevices.length; i++) {
